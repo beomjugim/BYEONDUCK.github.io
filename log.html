@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Log — BYEONDUCK</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <div class="bg-canvas" id="bgCanvas"></div>
+
+  <!-- MOBILE TOP NAV -->
+  <nav class="mobile-nav-bar">
+    <span class="mobile-brand">BYEONDUCK</span>
+    <button class="hamburger" id="hamburger" aria-label="메뉴 열기">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+  <div class="mobile-menu" id="mobileMenu">
+    <a class="nav-btn" href="index.html"><span class="nav-arrow">▶</span><span class="nav-icon">🏠</span><span class="nav-text">Home</span></a>
+    <a class="nav-btn" href="characters-duck.html"><span class="nav-arrow">▶</span><span class="nav-icon">🐤</span><span class="nav-text">Characters</span></a>
+    <a class="nav-btn" href="characters-truck.html"><span class="nav-arrow">▶</span><span class="nav-icon">🚛</span><span class="nav-text">Characters</span></a>
+    <a class="nav-btn" href="bcut.html"><span class="nav-arrow">▶</span><span class="nav-icon">🎬</span><span class="nav-text">B-cut</span></a>
+    <a class="nav-btn" href="log.html"><span class="nav-arrow">▶</span><span class="nav-icon">📖</span><span class="nav-text">Log</span></a>
+  </div>
+
+  <div class="page-wrapper">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="profile-area">
+        <div class="profile-frame">
+          <img
+            class="profile-img"
+            src="profile.png"
+            alt="BYEONDUCK Profile"
+            onerror="onProfileImgError(this)"
+          />
+          <span class="corner tl"></span>
+          <span class="corner tr"></span>
+          <span class="corner bl"></span>
+          <span class="corner br"></span>
+        </div>
+        <p class="profile-name">BYEONDUCK</p>
+        <p class="profile-tagline">Developer · Creator · Dreamer</p>
+      </div>
+
+      <hr class="sidebar-sep" />
+
+      <nav class="sidebar-nav">
+        <p class="nav-label">— MENU —</p>
+        <a class="nav-btn" href="index.html">
+          <span class="nav-arrow">▶</span><span class="nav-icon">🏠</span><span class="nav-text">Home</span>
+        </a>
+        <a class="nav-btn" href="characters-duck.html">
+          <span class="nav-arrow">▶</span><span class="nav-icon">🐤</span><span class="nav-text">Characters</span>
+        </a>
+        <a class="nav-btn" href="characters-truck.html">
+          <span class="nav-arrow">▶</span><span class="nav-icon">🚛</span><span class="nav-text">Characters</span>
+        </a>
+        <a class="nav-btn" href="bcut.html">
+          <span class="nav-arrow">▶</span><span class="nav-icon">🎬</span><span class="nav-text">B-cut</span>
+        </a>
+        <a class="nav-btn active" href="log.html">
+          <span class="nav-arrow">▶</span><span class="nav-icon">📖</span><span class="nav-text">Log</span>
+        </a>
+      </nav>
+
+      <hr class="sidebar-sep" />
+
+      <p class="sidebar-footer">
+        © 2026 BYEONDUCK<br/>Made with ✨
+      </p>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+      <div class="rpg-window">
+        <span class="win-corner tl"></span>
+        <span class="win-corner tr"></span>
+        <span class="win-corner bl"></span>
+        <span class="win-corner br"></span>
+
+        <div class="coming-soon">
+          <div class="coming-soon-icon">📖</div>
+          <h1 class="coming-soon-title">Log</h1>
+          <p class="coming-soon-subtitle">로그 페이지를 준비 중입니다. 개발 일지와 여정 기록을 곧 만나보세요!</p>
+          <p class="rpg-blink">▶ COMING SOON ◀</p>
+        </div>
+      </div>
+
+      <footer class="site-footer">
+        © 2026 <span>BYEONDUCK</span> — Built with ✨ and caffeine.
+      </footer>
+    </main>
+
+  </div>
+
+  <script>
+    function onProfileImgError(img) {
+      img.style.background = 'linear-gradient(135deg,rgba(168,216,234,.3) 0%,rgba(195,177,225,.3) 100%)';
+      img.removeAttribute('onerror');
+    }
+
+    (function () {
+      const canvas = document.getElementById('bgCanvas');
+      const COUNT = 28;
+      for (let i = 0; i < COUNT; i++) {
+        const el = document.createElement('div');
+        el.className = 'spark';
+        const size = 2 + Math.random() * 4;
+        el.style.cssText = [
+          'width:' + size + 'px',
+          'height:' + size + 'px',
+          'left:' + (Math.random() * 100) + '%',
+          'top:' + (Math.random() * 100) + '%',
+          'animation-duration:' + (3 + Math.random() * 5) + 's',
+          'animation-delay:' + (-Math.random() * 6) + 's',
+          'border-radius:' + (Math.random() > 0.5 ? '50%' : '1px'),
+          'opacity:' + (0.3 + Math.random() * 0.7)
+        ].join(';');
+        canvas.appendChild(el);
+      }
+    })();
+
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    hamburger.addEventListener('click', () => {
+      mobileMenu.classList.toggle('open');
+      const spans = hamburger.querySelectorAll('span');
+      const isOpen = mobileMenu.classList.contains('open');
+      spans[0].style.transform = isOpen ? 'rotate(45deg) translateY(6px)' : '';
+      spans[1].style.opacity = isOpen ? '0' : '';
+      spans[2].style.transform = isOpen ? 'rotate(-45deg) translateY(-6px)' : '';
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,474 @@
+/* ═══════════════════════════════════════════
+   0. RESET & VARIABLES
+═══════════════════════════════════════════ */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --black:   #0a0a0a;
+  --red:     #FF1744;
+  --yellow:  #FFD600;
+  --white:   #f5f5f5;
+  --glass:   rgba(255, 255, 255, 0.06);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --dot-color: rgba(255, 23, 68, 0.08);
+}
+
+/* ═══════════════════════════════════════════
+   1. BODY — 만화 도트 패턴 배경
+═══════════════════════════════════════════ */
+body {
+  background-color: var(--black);
+  color: var(--white);
+  font-family: 'Noto Sans KR', sans-serif;
+  overflow-x: hidden;
+  background-image:
+    radial-gradient(circle, var(--dot-color) 1px, transparent 1px);
+  background-size: 18px 18px;
+}
+
+/* ═══════════════════════════════════════════
+   2. HERO — 만화 타이틀 배너
+═══════════════════════════════════════════ */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 40px,
+    rgba(255, 214, 0, 0.04) 40px,
+    rgba(255, 214, 0, 0.04) 42px
+  );
+  pointer-events: none;
+}
+
+.hero-title {
+  font-family: 'Bangers', cursive;
+  font-size: clamp(3rem, 10vw, 8rem);
+  letter-spacing: 0.05em;
+  color: var(--yellow);
+  text-shadow:
+    4px 4px 0 var(--red),
+    8px 8px 0 rgba(0,0,0,0.5);
+  transform: rotate(-2deg);
+  position: relative;
+  z-index: 2;
+}
+
+.hero-subtitle {
+  font-size: clamp(1rem, 3vw, 1.5rem);
+  color: var(--white);
+  margin-top: 1rem;
+  padding: 0.5rem 2rem;
+  background: var(--red);
+  display: inline-block;
+  transform: rotate(1deg);
+  clip-path: polygon(2% 0%, 100% 4%, 98% 100%, 0% 96%);
+  font-weight: 700;
+  position: relative;
+  z-index: 2;
+}
+
+.scroll-hint {
+  margin-top: 3rem;
+  font-size: 2rem;
+  animation: bounce 1.5s infinite;
+  position: relative;
+  z-index: 2;
+}
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(12px); }
+}
+
+/* ═══════════════════════════════════════════
+   3. STICKER — POW! / BANG! 장식
+═══════════════════════════════════════════ */
+.sticker {
+  position: absolute;
+  font-family: 'Bangers', cursive;
+  font-size: 2rem;
+  padding: 0.8rem 1.4rem;
+  border-radius: 50%;
+  z-index: 10;
+  pointer-events: none;
+  text-shadow: 2px 2px 0 rgba(0,0,0,0.3);
+}
+.sticker--pow {
+  background: var(--yellow);
+  color: var(--black);
+  top: 10%;
+  right: 8%;
+  transform: rotate(15deg);
+  box-shadow: 0 0 0 4px var(--black), 0 0 0 8px var(--yellow);
+}
+.sticker--bang {
+  background: var(--red);
+  color: var(--white);
+  bottom: 15%;
+  left: 5%;
+  transform: rotate(-10deg);
+  box-shadow: 0 0 0 4px var(--black), 0 0 0 8px var(--red);
+}
+
+/* ═══════════════════════════════════════════
+   4. SECTION COMMON
+═══════════════════════════════════════════ */
+section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+}
+
+.section-tag {
+  display: inline-block;
+  font-family: 'Bangers', cursive;
+  font-size: clamp(1.8rem, 5vw, 3rem);
+  background: var(--red);
+  color: var(--white);
+  padding: 0.3rem 1.2rem;
+  transform: rotate(-1deg);
+  margin-bottom: 2rem;
+  clip-path: polygon(0% 8%, 100% 0%, 98% 100%, 2% 92%);
+}
+
+/* ═══════════════════════════════════════════
+   5. GLASS CARD — 글래스모르피즘 카드
+═══════════════════════════════════════════ */
+.glass-card {
+  background: var(--glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  padding: 2rem;
+  position: relative;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.glass-card:hover {
+  transform: translateY(-6px) rotate(0deg) !important;
+  box-shadow:
+    0 12px 40px rgba(255, 23, 68, 0.25),
+    0 0 0 2px var(--red);
+}
+
+.glass-card::before {
+  content: '';
+  position: absolute;
+  top: -4px; left: -4px; right: -4px; bottom: -4px;
+  border: 3px dashed var(--yellow);
+  border-radius: 20px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+.glass-card:hover::before { opacity: 1; }
+
+/* ═══════════════════════════════════════════
+   6. ABOUT — 자기소개 (콜라주 레이아웃)
+═══════════════════════════════════════════ */
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-top: 2.5rem;
+}
+
+.about-card:nth-child(1) { transform: rotate(-1.5deg); }
+.about-card:nth-child(2) { transform: rotate(1deg);    }
+.about-card:nth-child(3) { transform: rotate(-0.5deg); }
+
+.about-card h3 {
+  font-family: 'Bangers', cursive;
+  font-size: 1.6rem;
+  color: var(--yellow);
+  margin-bottom: 0.8rem;
+}
+.about-card p {
+  line-height: 1.8;
+  color: rgba(245, 245, 245, 0.85);
+}
+
+.highlight {
+  color: var(--yellow);
+}
+
+/* 말풍선 스타일 */
+.speech-bubble {
+  position: relative;
+  background: var(--glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 2px solid var(--yellow);
+  border-radius: 20px;
+  padding: 1.5rem 2rem;
+  margin-top: 2rem;
+  font-size: 1.1rem;
+  line-height: 1.8;
+  max-width: 600px;
+  transform: rotate(0.5deg);
+}
+.speech-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -20px;
+  left: 40px;
+  border-width: 20px 15px 0;
+  border-style: solid;
+  border-color: var(--yellow) transparent transparent transparent;
+}
+
+/* ═══════════════════════════════════════════
+   7. SKILLS — 스킬 바
+═══════════════════════════════════════════ */
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.skill-item { padding: 1.2rem; }
+.skill-item:nth-child(odd)  { transform: rotate(0.8deg);  }
+.skill-item:nth-child(even) { transform: rotate(-0.8deg); }
+
+.skill-name {
+  font-family: 'Bangers', cursive;
+  font-size: 1.2rem;
+  color: var(--yellow);
+  margin-bottom: 0.5rem;
+}
+
+.skill-bar {
+  height: 14px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 7px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.skill-fill {
+  height: 100%;
+  border-radius: 7px;
+  background: linear-gradient(90deg, var(--red), var(--yellow));
+  transition: width 1.2s ease;
+}
+
+/* ═══════════════════════════════════════════
+   8. BLOG POSTS — 블로그 카드
+═══════════════════════════════════════════ */
+.blog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.blog-card { cursor: pointer; }
+.blog-card:nth-child(1) { transform: rotate(1deg);   }
+.blog-card:nth-child(2) { transform: rotate(-1.5deg); }
+.blog-card:nth-child(3) { transform: rotate(0.8deg);  }
+
+.blog-tag {
+  display: inline-block;
+  background: var(--red);
+  color: var(--white);
+  font-family: 'Bangers', cursive;
+  font-size: 0.85rem;
+  padding: 0.2rem 0.7rem;
+  border-radius: 4px;
+  margin-bottom: 0.6rem;
+}
+.blog-card h3 {
+  font-family: 'Bangers', cursive;
+  font-size: 1.5rem;
+  color: var(--yellow);
+  margin-bottom: 0.5rem;
+}
+.blog-card p {
+  color: rgba(245,245,245,0.75);
+  line-height: 1.7;
+  font-size: 0.95rem;
+}
+.blog-date {
+  margin-top: 1rem;
+  font-size: 0.8rem;
+  color: rgba(245,245,245,0.4);
+}
+
+/* ═══════════════════════════════════════════
+   9. CONTACT — 연락처
+═══════════════════════════════════════════ */
+.contact-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+.contact-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 2rem;
+  font-family: 'Bangers', cursive;
+  font-size: 1.2rem;
+  color: var(--black);
+  background: var(--yellow);
+  text-decoration: none;
+  border-radius: 12px;
+  border: 3px solid var(--black);
+  box-shadow: 4px 4px 0 var(--black);
+  transition: all 0.2s;
+  transform: rotate(-1deg);
+}
+.contact-link:nth-child(2) {
+  background: var(--red);
+  color: var(--white);
+  transform: rotate(1deg);
+}
+.contact-link:hover {
+  transform: translateY(-3px) rotate(0deg);
+  box-shadow: 6px 6px 0 var(--black);
+}
+
+/* ═══════════════════════════════════════════
+   10. FOOTER
+═══════════════════════════════════════════ */
+footer {
+  text-align: center;
+  padding: 3rem 2rem;
+  border-top: 3px dashed rgba(255,255,255,0.08);
+  font-size: 0.85rem;
+  color: rgba(245,245,245,0.35);
+}
+footer span {
+  color: var(--red);
+  font-family: 'Bangers', cursive;
+}
+
+/* ═══════════════════════════════════════════
+   11. DECORATIVE BLOBS (배경 그라데이션 원)
+═══════════════════════════════════════════ */
+.blob {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(100px);
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0.35;
+}
+.blob--red {
+  width: 500px; height: 500px;
+  background: var(--red);
+  top: -100px; left: -100px;
+}
+.blob--yellow {
+  width: 400px; height: 400px;
+  background: var(--yellow);
+  bottom: -80px; right: -80px;
+}
+.blob--red2 {
+  width: 350px; height: 350px;
+  background: var(--red);
+  top: 50%; right: 10%;
+}
+
+/* ═══════════════════════════════════════════
+   12. TAPE (테이프 장식)
+═══════════════════════════════════════════ */
+.tape {
+  position: absolute;
+  width: 80px;
+  height: 24px;
+  background: rgba(255, 214, 0, 0.5);
+  border: 1px solid rgba(255, 214, 0, 0.3);
+  z-index: 5;
+}
+.tape--tl { top: -10px; left: 20px;  transform: rotate(-25deg); }
+.tape--tr { top: -10px; right: 20px; transform: rotate(20deg);  }
+
+/* ═══════════════════════════════════════════
+   13. TIMELINE (경력/히스토리)
+═══════════════════════════════════════════ */
+.timeline {
+  position: relative;
+  padding-left: 3rem;
+}
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 0.75rem;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(to bottom, var(--red), var(--yellow));
+  border-radius: 2px;
+}
+.timeline-item {
+  position: relative;
+  margin-bottom: 2.5rem;
+  padding: 1.5rem;
+  transform: rotate(-0.3deg);
+}
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -2.55rem;
+  top: 1.6rem;
+  width: 16px;
+  height: 16px;
+  background: var(--yellow);
+  border: 3px solid var(--black);
+  border-radius: 50%;
+}
+.timeline-item:nth-child(even) { transform: rotate(0.5deg); }
+
+.timeline-year {
+  font-family: 'Bangers', cursive;
+  font-size: 1.3rem;
+  color: var(--red);
+  margin-bottom: 0.3rem;
+}
+.timeline-item h3 {
+  font-family: 'Bangers', cursive;
+  font-size: 1.3rem;
+  color: var(--yellow);
+  margin-bottom: 0.4rem;
+}
+.timeline-item p {
+  color: rgba(245,245,245,0.75);
+  line-height: 1.7;
+}
+
+/* ═══════════════════════════════════════════
+   14. RESPONSIVE
+═══════════════════════════════════════════ */
+@media (max-width: 640px) {
+  .sticker { display: none; }
+  .hero-title { font-size: 3rem; }
+  section { padding: 3rem 1rem; }
+  .contact-links { flex-direction: column; }
+  .contact-link { width: 100%; justify-content: center; }
+}
+
+/* ═══════════════════════════════════════════
+   15. SCROLL REVEAL ANIMATION
+═══════════════════════════════════════════ */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}

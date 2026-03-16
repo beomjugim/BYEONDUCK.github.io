@@ -3,193 +3,396 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BYEONDUCK — Portfolio & Blog</title>
+  <title>BYEONDUCK — Portfolio &amp; Blog</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet" />
 </head>
 <body>
 
-  <!-- BACKGROUND BLOBS -->
-  <div class="blob blob--red"></div>
-  <div class="blob blob--yellow"></div>
-  <div class="blob blob--red2"></div>
+  <!-- ── ANIMATED BACKGROUND ── -->
+  <div class="bg-canvas" id="bgCanvas"></div>
 
-  <!-- HERO SECTION -->
-  <header class="hero">
-    <div class="sticker sticker--pow">POW!</div>
-    <div class="sticker sticker--bang">BANG!</div>
+  <!-- ── MOBILE TOP NAV ── -->
+  <nav class="mobile-nav-bar">
+    <span class="mobile-brand">BYEONDUCK</span>
+    <button class="hamburger" id="hamburger" aria-label="메뉴 열기">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+  <div class="mobile-menu" id="mobileMenu">
+    <a class="nav-btn" href="index.html"><span class="nav-arrow">▶</span><span class="nav-icon">🏠</span><span class="nav-text">Home</span></a>
+    <a class="nav-btn" href="characters-duck.html"><span class="nav-arrow">▶</span><span class="nav-icon">🐤</span><span class="nav-text">Characters</span></a>
+    <a class="nav-btn" href="characters-truck.html"><span class="nav-arrow">▶</span><span class="nav-icon">🚛</span><span class="nav-text">Characters</span></a>
+    <a class="nav-btn" href="bcut.html"><span class="nav-arrow">▶</span><span class="nav-icon">🎬</span><span class="nav-text">B-cut</span></a>
+    <a class="nav-btn" href="log.html"><span class="nav-arrow">▶</span><span class="nav-icon">📖</span><span class="nav-text">Log</span></a>
+  </div>
 
-    <h1 class="hero-title">BYEONDUCK</h1>
-    <p class="hero-subtitle">DEVELOPER · CREATOR · DREAMER</p>
+  <!-- ── PAGE WRAPPER ── -->
+  <div class="page-wrapper">
 
-    <div class="scroll-hint">▼</div>
-  </header>
+    <!-- ════════════════════════════════
+         SIDEBAR
+    ════════════════════════════════ -->
+    <aside class="sidebar">
 
-  <!-- ABOUT SECTION -->
-  <section id="about">
-    <div class="section-tag reveal">ABOUT ME</div>
+      <!-- Profile -->
+      <div class="profile-area">
+        <div class="profile-frame">
+          <img
+            class="profile-img"
+            src="profile.png"
+            alt="BYEONDUCK Profile"
+            onerror="this.style.background='linear-gradient(135deg,rgba(168,216,234,.3) 0%,rgba(195,177,225,.3) 100%)';this.style.display='block';this.removeAttribute('onerror');"
+          />
+          <span class="corner tl"></span>
+          <span class="corner tr"></span>
+          <span class="corner bl"></span>
+          <span class="corner br"></span>
+        </div>
+        <p class="profile-name">BYEONDUCK</p>
+        <p class="profile-tagline">Developer · Creator · Dreamer</p>
+      </div>
 
-    <div class="speech-bubble reveal">
-      "안녕하세요! 저는 <strong class="highlight">BYEONDUCK</strong>입니다.<br/>
-      코드를 통해 세상과 소통하고, 새로운 것을 만드는 걸 좋아합니다. 🚀"
-    </div>
+      <hr class="sidebar-sep" />
 
-    <div class="about-grid">
-      <div class="glass-card about-card reveal">
-        <div class="tape tape--tl"></div>
-        <h3>🎯 WHO AM I</h3>
-        <p>
-          끊임없이 배우고 성장하려는 개발자입니다.
-          문제를 해결할 때 가장 큰 즐거움을 느끼고,
-          깔끔한 코드와 직관적인 UI를 추구합니다.
+      <!-- Navigation -->
+      <nav class="sidebar-nav">
+        <p class="nav-label">— MENU —</p>
+        <a class="nav-btn active" href="index.html">
+          <span class="nav-arrow">▶</span>
+          <span class="nav-icon">🏠</span>
+          <span class="nav-text">Home</span>
+        </a>
+        <a class="nav-btn" href="characters-duck.html">
+          <span class="nav-arrow">▶</span>
+          <span class="nav-icon">🐤</span>
+          <span class="nav-text">Characters</span>
+        </a>
+        <a class="nav-btn" href="characters-truck.html">
+          <span class="nav-arrow">▶</span>
+          <span class="nav-icon">🚛</span>
+          <span class="nav-text">Characters</span>
+        </a>
+        <a class="nav-btn" href="bcut.html">
+          <span class="nav-arrow">▶</span>
+          <span class="nav-icon">🎬</span>
+          <span class="nav-text">B-cut</span>
+        </a>
+        <a class="nav-btn" href="log.html">
+          <span class="nav-arrow">▶</span>
+          <span class="nav-icon">📖</span>
+          <span class="nav-text">Log</span>
+        </a>
+      </nav>
+
+      <hr class="sidebar-sep" />
+
+      <!-- Footer text in sidebar -->
+      <p style="font-family:'Press Start 2P',monospace;font-size:0.38rem;color:rgba(248,249,255,0.22);text-align:center;line-height:2;letter-spacing:0.08em;margin-top:auto;">
+        © 2026 BYEONDUCK<br/>Made with ✨
+      </p>
+
+    </aside><!-- end sidebar -->
+
+    <!-- ════════════════════════════════
+         MAIN CONTENT
+    ════════════════════════════════ -->
+    <main class="main-content">
+
+      <!-- ── HERO ── -->
+      <section class="hero" id="home">
+        <p class="hero-eyebrow">✦ WELCOME TO MY WORLD ✦</p>
+        <h1 class="hero-title">
+          BYEONDUCK
+          <span class="accent">PORTFOLIO</span>
+        </h1>
+        <p class="hero-subtitle">
+          코드를 통해 세상과 소통하고, 새로운 것을 만드는 걸 좋아합니다.
+          끊임없이 배우고 성장하는 개발자입니다. 🚀
         </p>
-      </div>
+        <div class="hero-badges">
+          <span class="badge">⚡ DEVELOPER</span>
+          <span class="badge">🎨 CREATOR</span>
+          <span class="badge">🌙 DREAMER</span>
+          <span class="badge">🎮 GAMER</span>
+        </div>
+        <div class="scroll-hint">▼</div>
+      </section>
 
-      <div class="glass-card about-card reveal">
-        <div class="tape tape--tr"></div>
-        <h3>💡 WHAT I DO</h3>
-        <p>
-          웹 개발, 사이드 프로젝트, 그리고 다양한 기술 실험을 합니다.
-          프론트엔드부터 백엔드까지, 풀스택 경험을 쌓아가고 있습니다.
-        </p>
-      </div>
+      <!-- ── ABOUT ── -->
+      <section id="about">
+        <div class="rpg-window reveal">
+          <span class="win-corner tl"></span>
+          <span class="win-corner tr"></span>
+          <span class="win-corner bl"></span>
+          <span class="win-corner br"></span>
 
-      <div class="glass-card about-card reveal">
-        <div class="tape tape--tl"></div>
-        <h3>🎮 INTERESTS</h3>
-        <p>
-          만화, 게임, 음악, 그리고 새로운 기술 트렌드.
-          가끔은 커피 한 잔과 함께 블로그 글도 씁니다 ☕
-        </p>
-      </div>
-    </div>
-  </section>
+          <h2 class="section-title">
+            <span class="chapter-label">CH.01</span>
+            <span class="title-icon">👤</span>
+            ABOUT ME
+          </h2>
 
-  <!-- JOURNEY / TIMELINE -->
-  <section id="journey">
-    <div class="section-tag reveal">MY JOURNEY</div>
+          <p class="about-intro">
+            "안녕하세요! 저는 <strong>BYEONDUCK</strong>입니다.<br/>
+            코드를 통해 세상과 소통하고, 새로운 것을 만드는 걸 좋아합니다. 🚀"
+          </p>
 
-    <div class="timeline">
-      <div class="glass-card timeline-item reveal">
-        <div class="timeline-year">2024</div>
-        <h3>프로젝트 시작</h3>
-        <p>본격적으로 개발 공부를 시작하고, 첫 번째 사이드 프로젝트를 완성했습니다.</p>
-      </div>
+          <div class="about-grid">
+            <div class="glass-card about-card reveal">
+              <h3>🎯 WHO AM I</h3>
+              <p>
+                끊임없이 배우고 성장하려는 개발자입니다.
+                문제를 해결할 때 가장 큰 즐거움을 느끼고,
+                깔끔한 코드와 직관적인 UI를 추구합니다.
+              </p>
+            </div>
 
-      <div class="glass-card timeline-item reveal">
-        <div class="timeline-year">2025</div>
-        <h3>성장의 해</h3>
-        <p>다양한 기술 스택을 경험하고, 오픈소스에 기여하기 시작했습니다.</p>
-      </div>
+            <div class="glass-card about-card reveal">
+              <h3>💡 WHAT I DO</h3>
+              <p>
+                웹 개발, 사이드 프로젝트, 그리고 다양한 기술 실험을 합니다.
+                프론트엔드부터 백엔드까지, 풀스택 경험을 쌓아가고 있습니다.
+              </p>
+            </div>
 
-      <div class="glass-card timeline-item reveal">
-        <div class="timeline-year">2026</div>
-        <h3>현재 진행형</h3>
-        <p>지금 이 순간에도 새로운 것을 배우고, 더 나은 개발자가 되기 위해 노력 중입니다.</p>
-      </div>
-    </div>
-  </section>
+            <div class="glass-card about-card reveal">
+              <h3>🎮 INTERESTS</h3>
+              <p>
+                만화, 게임, 음악, 그리고 새로운 기술 트렌드.
+                가끔은 커피 한 잔과 함께 블로그 글도 씁니다 ☕
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
 
-  <!-- SKILLS SECTION -->
-  <section id="skills">
-    <div class="section-tag reveal">SKILLS</div>
+      <!-- ── JOURNEY ── -->
+      <section id="journey">
+        <div class="rpg-window reveal">
+          <span class="win-corner tl"></span>
+          <span class="win-corner tr"></span>
+          <span class="win-corner bl"></span>
+          <span class="win-corner br"></span>
 
-    <div class="skills-grid">
-      <div class="glass-card skill-item reveal">
-        <div class="skill-name">HTML / CSS</div>
-        <div class="skill-bar"><div class="skill-fill" style="width:90%"></div></div>
-      </div>
-      <div class="glass-card skill-item reveal">
-        <div class="skill-name">JavaScript</div>
-        <div class="skill-bar"><div class="skill-fill" style="width:75%"></div></div>
-      </div>
-      <div class="glass-card skill-item reveal">
-        <div class="skill-name">Python</div>
-        <div class="skill-bar"><div class="skill-fill" style="width:70%"></div></div>
-      </div>
-      <div class="glass-card skill-item reveal">
-        <div class="skill-name">React</div>
-        <div class="skill-bar"><div class="skill-fill" style="width:60%"></div></div>
-      </div>
-      <div class="glass-card skill-item reveal">
-        <div class="skill-name">Git & GitHub</div>
-        <div class="skill-bar"><div class="skill-fill" style="width:85%"></div></div>
-      </div>
-      <div class="glass-card skill-item reveal">
-        <div class="skill-name">UI / UX Design</div>
-        <div class="skill-bar"><div class="skill-fill" style="width:65%"></div></div>
-      </div>
-    </div>
-  </section>
+          <h2 class="section-title">
+            <span class="chapter-label">CH.02</span>
+            <span class="title-icon">⚔️</span>
+            QUEST LOG
+          </h2>
 
-  <!-- BLOG SECTION -->
-  <section id="blog">
-    <div class="section-tag reveal">BLOG</div>
+          <div class="timeline">
+            <div class="glass-card timeline-item reveal">
+              <div class="timeline-year">2024</div>
+              <h3>프로젝트 시작</h3>
+              <p>본격적으로 개발 공부를 시작하고, 첫 번째 사이드 프로젝트를 완성했습니다.</p>
+            </div>
 
-    <div class="blog-grid">
-      <div class="glass-card blog-card reveal">
-        <div class="tape tape--tr"></div>
-        <span class="blog-tag">DEV</span>
-        <h3>GitHub Pages로 나만의 사이트 만들기</h3>
-        <p>GitHub Pages를 활용해서 무료로 개인 웹사이트를 호스팅하는 방법을 정리했습니다.</p>
-        <div class="blog-date">2026.03.16</div>
-      </div>
+            <div class="glass-card timeline-item reveal">
+              <div class="timeline-year">2025</div>
+              <h3>성장의 해</h3>
+              <p>다양한 기술 스택을 경험하고, 오픈소스에 기여하기 시작했습니다.</p>
+            </div>
 
-      <div class="glass-card blog-card reveal">
-        <span class="blog-tag">DESIGN</span>
-        <h3>글래스모르피즘이 뭔데?</h3>
-        <p>요즘 트렌드인 글래스모르피즘 디자인의 원리와 CSS 구현법을 알아봤습니다.</p>
-        <div class="blog-date">2026.03.10</div>
-      </div>
+            <div class="glass-card timeline-item reveal">
+              <div class="timeline-year">2026</div>
+              <h3>현재 진행형</h3>
+              <p>지금 이 순간에도 새로운 것을 배우고, 더 나은 개발자가 되기 위해 노력 중입니다.</p>
+            </div>
+          </div>
+        </div>
+      </section>
 
-      <div class="glass-card blog-card reveal">
-        <div class="tape tape--tl"></div>
-        <span class="blog-tag">LIFE</span>
-        <h3>개발자의 하루 루틴</h3>
-        <p>효율적인 하루를 보내기 위한 저만의 루틴과 생산성 팁을 공유합니다.</p>
-        <div class="blog-date">2026.03.05</div>
-      </div>
-    </div>
-  </section>
+      <!-- ── SKILLS ── -->
+      <section id="skills">
+        <div class="rpg-window reveal">
+          <span class="win-corner tl"></span>
+          <span class="win-corner tr"></span>
+          <span class="win-corner bl"></span>
+          <span class="win-corner br"></span>
 
-  <!-- CONTACT SECTION -->
-  <section id="contact">
-    <div class="section-tag reveal">CONTACT</div>
+          <h2 class="section-title">
+            <span class="chapter-label">CH.03</span>
+            <span class="title-icon">🧩</span>
+            SKILLS
+          </h2>
 
-    <div class="speech-bubble reveal" style="margin-bottom:2rem;">
-      "함께 작업하고 싶거나, 그냥 인사하고 싶다면 편하게 연락주세요! 💬"
-    </div>
+          <div class="skills-grid">
+            <div class="glass-card skill-item reveal">
+              <div class="skill-header">
+                <span class="skill-name">HTML / CSS</span>
+                <span class="skill-pct">90%</span>
+              </div>
+              <div class="skill-bar"><div class="skill-fill" style="width:90%"></div></div>
+            </div>
+            <div class="glass-card skill-item reveal">
+              <div class="skill-header">
+                <span class="skill-name">JavaScript</span>
+                <span class="skill-pct">75%</span>
+              </div>
+              <div class="skill-bar"><div class="skill-fill" style="width:75%"></div></div>
+            </div>
+            <div class="glass-card skill-item reveal">
+              <div class="skill-header">
+                <span class="skill-name">Python</span>
+                <span class="skill-pct">70%</span>
+              </div>
+              <div class="skill-bar"><div class="skill-fill" style="width:70%"></div></div>
+            </div>
+            <div class="glass-card skill-item reveal">
+              <div class="skill-header">
+                <span class="skill-name">React</span>
+                <span class="skill-pct">60%</span>
+              </div>
+              <div class="skill-bar"><div class="skill-fill" style="width:60%"></div></div>
+            </div>
+            <div class="glass-card skill-item reveal">
+              <div class="skill-header">
+                <span class="skill-name">Git &amp; GitHub</span>
+                <span class="skill-pct">85%</span>
+              </div>
+              <div class="skill-bar"><div class="skill-fill" style="width:85%"></div></div>
+            </div>
+            <div class="glass-card skill-item reveal">
+              <div class="skill-header">
+                <span class="skill-name">UI / UX Design</span>
+                <span class="skill-pct">65%</span>
+              </div>
+              <div class="skill-bar"><div class="skill-fill" style="width:65%"></div></div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-    <div class="contact-links reveal">
-      <a class="contact-link" href="https://github.com/beomjugim" target="_blank">
-        ⚡ GitHub
-      </a>
-      <a class="contact-link" href="mailto:your-email@example.com">
-        ✉️ Email
-      </a>
-    </div>
-  </section>
+      <!-- ── BLOG ── -->
+      <section id="blog">
+        <div class="rpg-window reveal">
+          <span class="win-corner tl"></span>
+          <span class="win-corner tr"></span>
+          <span class="win-corner bl"></span>
+          <span class="win-corner br"></span>
 
-  <!-- FOOTER -->
-  <footer>
-    <p>© 2026 <span>BYEONDUCK</span> — Built with 🔥 and caffeine.</p>
-  </footer>
+          <h2 class="section-title">
+            <span class="chapter-label">CH.04</span>
+            <span class="title-icon">📜</span>
+            BLOG
+          </h2>
 
-  <!-- SCRIPT — Scroll Reveal -->
+          <div class="blog-grid">
+            <div class="glass-card blog-card reveal">
+              <span class="blog-tag tag-dev">DEV</span>
+              <h3>GitHub Pages로 나만의 사이트 만들기</h3>
+              <p>GitHub Pages를 활용해서 무료로 개인 웹사이트를 호스팅하는 방법을 정리했습니다.</p>
+              <div class="blog-date">2026.03.16</div>
+            </div>
+
+            <div class="glass-card blog-card reveal">
+              <span class="blog-tag tag-design">DESIGN</span>
+              <h3>글래스모르피즘이 뭔데?</h3>
+              <p>요즘 트렌드인 글래스모르피즘 디자인의 원리와 CSS 구현법을 알아봤습니다.</p>
+              <div class="blog-date">2026.03.10</div>
+            </div>
+
+            <div class="glass-card blog-card reveal">
+              <span class="blog-tag tag-life">LIFE</span>
+              <h3>개발자의 하루 루틴</h3>
+              <p>효율적인 하루를 보내기 위한 저만의 루틴과 생산성 팁을 공유합니다.</p>
+              <div class="blog-date">2026.03.05</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── CONTACT ── -->
+      <section id="contact">
+        <div class="rpg-window reveal">
+          <span class="win-corner tl"></span>
+          <span class="win-corner tr"></span>
+          <span class="win-corner bl"></span>
+          <span class="win-corner br"></span>
+
+          <h2 class="section-title">
+            <span class="chapter-label">CH.05</span>
+            <span class="title-icon">💌</span>
+            CONTACT
+          </h2>
+
+          <p class="contact-intro">
+            "함께 작업하고 싶거나, 그냥 인사하고 싶다면 편하게 연락주세요! 💬"
+          </p>
+
+          <div class="contact-links reveal">
+            <a class="contact-link github" href="https://github.com/beomjugim" target="_blank" rel="noopener noreferrer">
+              ⚡ GitHub
+            </a>
+            <a class="contact-link email" href="mailto:your-email@example.com">
+              ✉️ Email
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── FOOTER ── -->
+      <footer class="site-footer">
+        © 2026 <span>BYEONDUCK</span> — Built with ✨ and caffeine.
+      </footer>
+
+    </main><!-- end main-content -->
+
+  </div><!-- end page-wrapper -->
+
   <script>
-    const reveals = document.querySelectorAll('.reveal');
-
-    const observer = new IntersectionObserver((entries) => {
+    /* ── Scroll Reveal ── */
+    const revealEls = document.querySelectorAll('.reveal');
+    const revealObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('visible');
         }
       });
-    }, { threshold: 0.15 });
+    }, { threshold: 0.12 });
+    revealEls.forEach(el => revealObserver.observe(el));
 
-    reveals.forEach(el => observer.observe(el));
+    /* ── Particle / Sparkle Background ── */
+    (function () {
+      const canvas = document.getElementById('bgCanvas');
+      const COUNT = 28;
+      for (let i = 0; i < COUNT; i++) {
+        const el = document.createElement('div');
+        el.className = 'spark';
+        const size = 2 + Math.random() * 4;
+        el.style.cssText = [
+          'width:' + size + 'px',
+          'height:' + size + 'px',
+          'left:' + (Math.random() * 100) + '%',
+          'top:' + (Math.random() * 100) + '%',
+          'animation-duration:' + (3 + Math.random() * 5) + 's',
+          'animation-delay:' + (-Math.random() * 6) + 's',
+          'border-radius:' + (Math.random() > 0.5 ? '50%' : '1px'),
+          'opacity:' + (0.3 + Math.random() * 0.7)
+        ].join(';');
+        canvas.appendChild(el);
+      }
+    })();
+
+    /* ── Mobile Hamburger ── */
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    hamburger.addEventListener('click', () => {
+      mobileMenu.classList.toggle('open');
+      const spans = hamburger.querySelectorAll('span');
+      const isOpen = mobileMenu.classList.contains('open');
+      spans[0].style.transform = isOpen ? 'rotate(45deg) translateY(6px)' : '';
+      spans[1].style.opacity = isOpen ? '0' : '';
+      spans[2].style.transform = isOpen ? 'rotate(-45deg) translateY(-6px)' : '';
+    });
+    mobileMenu.querySelectorAll('.nav-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        mobileMenu.classList.remove('open');
+      });
+    });
   </script>
 
 </body>

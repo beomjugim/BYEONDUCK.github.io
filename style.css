@@ -1,474 +1,1041 @@
 /* ═══════════════════════════════════════════
-   0. RESET & VARIABLES
+   0. RESET & CSS VARIABLES
 ═══════════════════════════════════════════ */
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
 :root {
-  --black:   #0a0a0a;
-  --red:     #FF1744;
-  --yellow:  #FFD600;
-  --white:   #f5f5f5;
-  --glass:   rgba(255, 255, 255, 0.06);
-  --glass-border: rgba(255, 255, 255, 0.12);
-  --dot-color: rgba(255, 23, 68, 0.08);
+  /* Pastel Palette */
+  --pastel-blue:   #a8d8ea;
+  --pastel-purple: #c3b1e1;
+  --pastel-green:  #b5ead7;
+  --pastel-pink:   #ffd6e7;
+  --white:         #f8f9ff;
+  --dark:          #1a1a2e;
+  --dark-mid:      #16213e;
+  --dark-light:    #0f3460;
+
+  /* Glass */
+  --glass:         rgba(255, 255, 255, 0.08);
+  --glass-hover:   rgba(255, 255, 255, 0.14);
+  --glass-border:  rgba(255, 255, 255, 0.20);
+  --glass-strong:  rgba(255, 255, 255, 0.12);
+
+  /* Shadows */
+  --shadow-blue:   rgba(168, 216, 234, 0.30);
+  --shadow-purple: rgba(195, 177, 225, 0.30);
+  --shadow-green:  rgba(181, 234, 215, 0.30);
+
+  /* Layout */
+  --sidebar-width: 300px;
+  --content-max:   860px;
 }
 
 /* ═══════════════════════════════════════════
-   1. BODY — 만화 도트 패턴 배경
+   1. BODY & GLOBAL
 ═══════════════════════════════════════════ */
 body {
-  background-color: var(--black);
+  background-color: var(--dark);
   color: var(--white);
   font-family: 'Noto Sans KR', sans-serif;
   overflow-x: hidden;
-  background-image:
-    radial-gradient(circle, var(--dot-color) 1px, transparent 1px);
-  background-size: 18px 18px;
+  min-height: 100vh;
+}
+
+a { text-decoration: none; color: inherit; }
+
+/* ═══════════════════════════════════════════
+   2. ANIMATED BACKGROUND (Particles)
+═══════════════════════════════════════════ */
+.bg-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 15% 20%, rgba(168,216,234,0.12) 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 70%, rgba(195,177,225,0.12) 0%, transparent 55%),
+    radial-gradient(ellipse at 50% 50%, rgba(181,234,215,0.06) 0%, transparent 70%),
+    linear-gradient(160deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+}
+
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: float-up linear infinite;
+  opacity: 0;
+}
+
+/* Pixel-star sparkles */
+.spark {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: var(--pastel-blue);
+  pointer-events: none;
+  animation: sparkle ease-in-out infinite;
+  image-rendering: pixelated;
+}
+.spark:nth-child(2n)   { background: var(--pastel-purple); animation-delay: -1.2s; }
+.spark:nth-child(3n)   { background: var(--pastel-green);  animation-delay: -2.4s; }
+.spark:nth-child(4n)   { width: 6px; height: 6px; animation-delay: -3.6s; }
+.spark:nth-child(5n)   { background: var(--pastel-pink);   animation-delay: -4.8s; }
+
+@keyframes float-up {
+  0%   { transform: translateY(110vh) translateX(0);   opacity: 0; }
+  10%  { opacity: 0.7; }
+  90%  { opacity: 0.5; }
+  100% { transform: translateY(-10vh) translateX(30px); opacity: 0; }
+}
+
+@keyframes sparkle {
+  0%, 100% { transform: scale(0) rotate(0deg);   opacity: 0; }
+  25%       { transform: scale(1.5) rotate(45deg); opacity: 1; }
+  50%       { transform: scale(1) rotate(90deg);   opacity: 0.7; }
+  75%       { transform: scale(1.2) rotate(135deg);opacity: 0.5; }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(10px); }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 10px var(--shadow-blue), 0 0 20px var(--shadow-blue); }
+  50%       { box-shadow: 0 0 20px var(--shadow-purple), 0 0 40px var(--shadow-purple); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes rpg-cursor-blink {
+  0%, 49%  { opacity: 1; }
+  50%, 100% { opacity: 0; }
 }
 
 /* ═══════════════════════════════════════════
-   2. HERO — 만화 타이틀 배너
+   3. PAGE LAYOUT — Two-Column
 ═══════════════════════════════════════════ */
-.hero {
+.page-wrapper {
   position: relative;
+  z-index: 1;
+  display: flex;
   min-height: 100vh;
+}
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width: var(--sidebar-width);
+  min-width: var(--sidebar-width);
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 2rem 1.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  background: rgba(22, 33, 62, 0.60);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-right: 2px solid var(--glass-border);
+  scrollbar-width: thin;
+  scrollbar-color: rgba(168,216,234,0.3) transparent;
+  flex-shrink: 0;
+}
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-track { background: transparent; }
+.sidebar::-webkit-scrollbar-thumb {
+  background: rgba(168,216,234,0.3);
+  border-radius: 2px;
+}
+
+/* ── MAIN CONTENT ── */
+.main-content {
+  flex: 1;
+  min-width: 0;
+  padding: 2.5rem 3rem;
+  overflow-x: hidden;
+}
+
+/* ═══════════════════════════════════════════
+   4. SIDEBAR — Profile Area
+═══════════════════════════════════════════ */
+.profile-area {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 2rem;
+  gap: 0.8rem;
 }
 
-.hero::before {
+/* RPG-style frame for profile image */
+.profile-frame {
+  position: relative;
+  width: 160px;
+  height: 160px;
+}
+.profile-frame::before,
+.profile-frame::after {
+  content: '';
+  position: absolute;
+  border: 3px solid var(--pastel-blue);
+  border-radius: 12px;
+  pointer-events: none;
+  transition: all 0.4s ease;
+}
+.profile-frame::before {
+  inset: -8px;
+  border-color: var(--pastel-purple);
+  opacity: 0.6;
+  border-style: double;
+  border-width: 4px;
+}
+.profile-frame::after {
+  inset: -16px;
+  border-color: var(--pastel-blue);
+  opacity: 0.3;
+  border-width: 2px;
+  border-style: solid;
+}
+
+.profile-img {
+  width: 160px;
+  height: 160px;
+  border-radius: 10px;
+  object-fit: cover;
+  display: block;
+  background: linear-gradient(135deg, rgba(168,216,234,0.25) 0%, rgba(195,177,225,0.25) 100%);
+  border: 3px solid rgba(168,216,234,0.50);
+}
+
+/* Pixel-art decorative corners on profile */
+.profile-frame .corner {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-color: var(--pastel-blue);
+  border-style: solid;
+  z-index: 2;
+  pointer-events: none;
+}
+.corner.tl { top: -4px;  left: -4px;  border-width: 3px 0 0 3px; }
+.corner.tr { top: -4px;  right: -4px; border-width: 3px 3px 0 0; }
+.corner.bl { bottom: -4px; left: -4px; border-width: 0 0 3px 3px; }
+.corner.br { bottom: -4px; right: -4px; border-width: 0 3px 3px 0; }
+
+.profile-name {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.75rem;
+  color: var(--pastel-blue);
+  text-align: center;
+  text-shadow: 0 0 10px rgba(168,216,234,0.6);
+  margin-top: 1.4rem;
+  letter-spacing: 0.05em;
+}
+
+.profile-tagline {
+  font-size: 0.78rem;
+  color: rgba(248, 249, 255, 0.60);
+  text-align: center;
+  line-height: 1.6;
+  padding: 0 0.5rem;
+}
+
+/* ═══════════════════════════════════════════
+   5. SIDEBAR — Navigation (RPG Menu)
+═══════════════════════════════════════════ */
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.nav-label {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.50rem;
+  color: var(--pastel-purple);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 0 0.5rem;
+  margin-bottom: 0.3rem;
+  opacity: 0.7;
+}
+
+.nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.75rem 1rem;
+  background: var(--glass);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
+  color: rgba(248, 249, 255, 0.85);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  /* RPG pixel border illusion */
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.10),
+    0 2px 8px rgba(0,0,0,0.3);
+}
+
+.nav-btn::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: repeating-linear-gradient(
-    -45deg,
-    transparent,
-    transparent 40px,
-    rgba(255, 214, 0, 0.04) 40px,
-    rgba(255, 214, 0, 0.04) 42px
-  );
+  background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.05) 100%);
+  opacity: 0;
+  transition: opacity 0.25s;
+}
+
+.nav-btn .nav-arrow {
+  font-size: 0.7rem;
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 0.25s, transform 0.25s;
+  color: var(--pastel-blue);
+  flex-shrink: 0;
+}
+
+.nav-btn .nav-icon {
+  font-size: 0.9rem;
+  flex-shrink: 0;
+  transition: transform 0.25s;
+}
+
+.nav-btn .nav-text {
+  flex: 1;
+}
+
+.nav-btn:hover,
+.nav-btn.active {
+  background: var(--glass-hover);
+  border-color: rgba(168, 216, 234, 0.45);
+  color: var(--white);
+  transform: translateX(4px);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.15),
+    0 0 16px var(--shadow-blue),
+    0 2px 12px rgba(0,0,0,0.4);
+}
+.nav-btn:hover::before,
+.nav-btn.active::before { opacity: 1; }
+
+.nav-btn:hover .nav-arrow,
+.nav-btn.active .nav-arrow {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.nav-btn:hover .nav-icon {
+  transform: scale(1.15);
+}
+
+/* Active nav item highlighted */
+.nav-btn.active {
+  border-color: rgba(195, 177, 225, 0.55);
+  background: rgba(195, 177, 225, 0.15);
+}
+
+/* RPG-style double-line outer border on hover */
+.nav-btn::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  transition: border-color 0.25s;
   pointer-events: none;
+}
+.nav-btn:hover::after {
+  border-color: rgba(168, 216, 234, 0.25);
+}
+
+/* Sidebar separator */
+.sidebar-sep {
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--glass-border), transparent);
+  border: none;
+  flex-shrink: 0;
+}
+
+/* ═══════════════════════════════════════════
+   6. RPG WINDOW / GLASS PANEL
+═══════════════════════════════════════════ */
+.rpg-window {
+  position: relative;
+  background: var(--glass-strong);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 2px solid var(--glass-border);
+  border-radius: 16px;
+  padding: 2.5rem;
+  margin-bottom: 2.5rem;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255,255,255,0.10);
+  transition: box-shadow 0.35s ease;
+}
+
+/* Decorative pixel corners on RPG windows */
+.rpg-window::before {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 12px;
+  pointer-events: none;
+}
+
+/* Corner pixel decorations */
+.rpg-window .win-corner {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
+}
+.rpg-window .win-corner.tl {
+  top: -2px; left: -2px;
+  border-top: 4px solid var(--pastel-blue);
+  border-left: 4px solid var(--pastel-blue);
+  border-radius: 4px 0 0 0;
+}
+.rpg-window .win-corner.tr {
+  top: -2px; right: -2px;
+  border-top: 4px solid var(--pastel-purple);
+  border-right: 4px solid var(--pastel-purple);
+  border-radius: 0 4px 0 0;
+}
+.rpg-window .win-corner.bl {
+  bottom: -2px; left: -2px;
+  border-bottom: 4px solid var(--pastel-green);
+  border-left: 4px solid var(--pastel-green);
+  border-radius: 0 0 0 4px;
+}
+.rpg-window .win-corner.br {
+  bottom: -2px; right: -2px;
+  border-bottom: 4px solid var(--pastel-blue);
+  border-right: 4px solid var(--pastel-blue);
+  border-radius: 0 0 4px 0;
+}
+
+.rpg-window:hover {
+  box-shadow:
+    0 12px 48px rgba(0, 0, 0, 0.35),
+    0 0 0 1px rgba(168,216,234,0.15),
+    inset 0 1px 0 rgba(255,255,255,0.12);
+}
+
+/* ═══════════════════════════════════════════
+   7. SECTION HEADERS (RPG Chapter Style)
+═══════════════════════════════════════════ */
+.section-title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(0.65rem, 1.5vw, 0.85rem);
+  color: var(--pastel-blue);
+  text-shadow: 0 0 12px rgba(168,216,234,0.50);
+  letter-spacing: 0.12em;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.section-title::after {
+  content: '';
+  flex: 1;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(168,216,234,0.5) 0%, rgba(195,177,225,0.3) 60%, transparent 100%);
+  border-radius: 1px;
+}
+
+.section-title .title-icon {
+  font-size: 1rem;
+  filter: drop-shadow(0 0 4px rgba(168,216,234,0.5));
+}
+
+.section-title .chapter-label {
+  font-size: 0.45rem;
+  color: rgba(195,177,225,0.7);
+  letter-spacing: 0.2em;
+  margin-right: 0.4rem;
+}
+
+/* ═══════════════════════════════════════════
+   8. HERO SECTION
+═══════════════════════════════════════════ */
+.hero {
+  min-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 3rem 0;
+  position: relative;
+}
+
+.hero-eyebrow {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.55rem;
+  color: var(--pastel-purple);
+  letter-spacing: 0.25em;
+  margin-bottom: 1.4rem;
+  opacity: 0.8;
 }
 
 .hero-title {
-  font-family: 'Bangers', cursive;
-  font-size: clamp(3rem, 10vw, 8rem);
-  letter-spacing: 0.05em;
-  color: var(--yellow);
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(1.4rem, 3.5vw, 2.5rem);
+  color: var(--white);
+  line-height: 1.5;
+  letter-spacing: 0.06em;
   text-shadow:
-    4px 4px 0 var(--red),
-    8px 8px 0 rgba(0,0,0,0.5);
-  transform: rotate(-2deg);
+    0 0 20px rgba(168,216,234,0.4),
+    0 0 60px rgba(168,216,234,0.15);
+  margin-bottom: 1.2rem;
   position: relative;
-  z-index: 2;
+}
+
+.hero-title .accent {
+  color: var(--pastel-blue);
+  display: block;
 }
 
 .hero-subtitle {
-  font-size: clamp(1rem, 3vw, 1.5rem);
+  font-size: 1rem;
+  color: rgba(248,249,255,0.65);
+  line-height: 1.9;
+  max-width: 560px;
+  margin-bottom: 2.5rem;
+}
+
+.hero-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin-bottom: 2.5rem;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.9rem;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.45rem;
+  color: rgba(248,249,255,0.80);
+  letter-spacing: 0.05em;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: all 0.25s;
+}
+.badge:hover {
+  background: var(--glass-hover);
+  border-color: rgba(168,216,234,0.40);
   color: var(--white);
-  margin-top: 1rem;
-  padding: 0.5rem 2rem;
-  background: var(--red);
-  display: inline-block;
-  transform: rotate(1deg);
-  clip-path: polygon(2% 0%, 100% 4%, 98% 100%, 0% 96%);
-  font-weight: 700;
-  position: relative;
-  z-index: 2;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px var(--shadow-blue);
 }
 
 .scroll-hint {
-  margin-top: 3rem;
-  font-size: 2rem;
-  animation: bounce 1.5s infinite;
-  position: relative;
-  z-index: 2;
-}
-@keyframes bounce {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(12px); }
+  font-size: 1.5rem;
+  color: rgba(168,216,234,0.5);
+  animation: bounce 2s infinite ease-in-out;
+  margin-top: 1rem;
 }
 
 /* ═══════════════════════════════════════════
-   3. STICKER — POW! / BANG! 장식
-═══════════════════════════════════════════ */
-.sticker {
-  position: absolute;
-  font-family: 'Bangers', cursive;
-  font-size: 2rem;
-  padding: 0.8rem 1.4rem;
-  border-radius: 50%;
-  z-index: 10;
-  pointer-events: none;
-  text-shadow: 2px 2px 0 rgba(0,0,0,0.3);
-}
-.sticker--pow {
-  background: var(--yellow);
-  color: var(--black);
-  top: 10%;
-  right: 8%;
-  transform: rotate(15deg);
-  box-shadow: 0 0 0 4px var(--black), 0 0 0 8px var(--yellow);
-}
-.sticker--bang {
-  background: var(--red);
-  color: var(--white);
-  bottom: 15%;
-  left: 5%;
-  transform: rotate(-10deg);
-  box-shadow: 0 0 0 4px var(--black), 0 0 0 8px var(--red);
-}
-
-/* ═══════════════════════════════════════════
-   4. SECTION COMMON
-═══════════════════════════════════════════ */
-section {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 4rem 2rem;
-}
-
-.section-tag {
-  display: inline-block;
-  font-family: 'Bangers', cursive;
-  font-size: clamp(1.8rem, 5vw, 3rem);
-  background: var(--red);
-  color: var(--white);
-  padding: 0.3rem 1.2rem;
-  transform: rotate(-1deg);
-  margin-bottom: 2rem;
-  clip-path: polygon(0% 8%, 100% 0%, 98% 100%, 2% 92%);
-}
-
-/* ═══════════════════════════════════════════
-   5. GLASS CARD — 글래스모르피즘 카드
+   9. GLASS CARD (general reusable)
 ═══════════════════════════════════════════ */
 .glass-card {
   background: var(--glass);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--glass-border);
-  border-radius: 16px;
-  padding: 2rem;
+  border-radius: 14px;
+  padding: 1.6rem;
   position: relative;
-  transition: transform 0.3s, box-shadow 0.3s;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 .glass-card:hover {
-  transform: translateY(-6px) rotate(0deg) !important;
+  transform: translateY(-5px);
+  border-color: rgba(168,216,234,0.38);
   box-shadow:
-    0 12px 40px rgba(255, 23, 68, 0.25),
-    0 0 0 2px var(--red);
+    0 12px 36px rgba(0,0,0,0.30),
+    0 0 0 1px rgba(168,216,234,0.18),
+    inset 0 1px 0 rgba(255,255,255,0.10);
 }
-
-.glass-card::before {
-  content: '';
-  position: absolute;
-  top: -4px; left: -4px; right: -4px; bottom: -4px;
-  border: 3px dashed var(--yellow);
-  border-radius: 20px;
-  opacity: 0;
-  transition: opacity 0.3s;
-  pointer-events: none;
-}
-.glass-card:hover::before { opacity: 1; }
 
 /* ═══════════════════════════════════════════
-   6. ABOUT — 자기소개 (콜라주 레이아웃)
+   10. ABOUT SECTION
 ═══════════════════════════════════════════ */
+.about-intro {
+  font-size: 0.97rem;
+  color: rgba(248,249,255,0.75);
+  line-height: 2;
+  margin-bottom: 2rem;
+  padding: 1.4rem 1.8rem;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  border-left: 4px solid var(--pastel-blue);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.about-intro strong {
+  color: var(--pastel-blue);
+}
+
 .about-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
-  margin-top: 2.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.2rem;
 }
-
-.about-card:nth-child(1) { transform: rotate(-1.5deg); }
-.about-card:nth-child(2) { transform: rotate(1deg);    }
-.about-card:nth-child(3) { transform: rotate(-0.5deg); }
 
 .about-card h3 {
-  font-family: 'Bangers', cursive;
-  font-size: 1.6rem;
-  color: var(--yellow);
-  margin-bottom: 0.8rem;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.58rem;
+  color: var(--pastel-purple);
+  margin-bottom: 0.9rem;
+  letter-spacing: 0.08em;
 }
 .about-card p {
-  line-height: 1.8;
-  color: rgba(245, 245, 245, 0.85);
-}
-
-.highlight {
-  color: var(--yellow);
-}
-
-/* 말풍선 스타일 */
-.speech-bubble {
-  position: relative;
-  background: var(--glass);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 2px solid var(--yellow);
-  border-radius: 20px;
-  padding: 1.5rem 2rem;
-  margin-top: 2rem;
-  font-size: 1.1rem;
-  line-height: 1.8;
-  max-width: 600px;
-  transform: rotate(0.5deg);
-}
-.speech-bubble::after {
-  content: '';
-  position: absolute;
-  bottom: -20px;
-  left: 40px;
-  border-width: 20px 15px 0;
-  border-style: solid;
-  border-color: var(--yellow) transparent transparent transparent;
+  font-size: 0.87rem;
+  line-height: 1.85;
+  color: rgba(248,249,255,0.72);
 }
 
 /* ═══════════════════════════════════════════
-   7. SKILLS — 스킬 바
-═══════════════════════════════════════════ */
-.skills-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
-}
-
-.skill-item { padding: 1.2rem; }
-.skill-item:nth-child(odd)  { transform: rotate(0.8deg);  }
-.skill-item:nth-child(even) { transform: rotate(-0.8deg); }
-
-.skill-name {
-  font-family: 'Bangers', cursive;
-  font-size: 1.2rem;
-  color: var(--yellow);
-  margin-bottom: 0.5rem;
-}
-
-.skill-bar {
-  height: 14px;
-  background: rgba(255,255,255,0.08);
-  border-radius: 7px;
-  overflow: hidden;
-  border: 1px solid rgba(255,255,255,0.1);
-}
-.skill-fill {
-  height: 100%;
-  border-radius: 7px;
-  background: linear-gradient(90deg, var(--red), var(--yellow));
-  transition: width 1.2s ease;
-}
-
-/* ═══════════════════════════════════════════
-   8. BLOG POSTS — 블로그 카드
-═══════════════════════════════════════════ */
-.blog-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-}
-
-.blog-card { cursor: pointer; }
-.blog-card:nth-child(1) { transform: rotate(1deg);   }
-.blog-card:nth-child(2) { transform: rotate(-1.5deg); }
-.blog-card:nth-child(3) { transform: rotate(0.8deg);  }
-
-.blog-tag {
-  display: inline-block;
-  background: var(--red);
-  color: var(--white);
-  font-family: 'Bangers', cursive;
-  font-size: 0.85rem;
-  padding: 0.2rem 0.7rem;
-  border-radius: 4px;
-  margin-bottom: 0.6rem;
-}
-.blog-card h3 {
-  font-family: 'Bangers', cursive;
-  font-size: 1.5rem;
-  color: var(--yellow);
-  margin-bottom: 0.5rem;
-}
-.blog-card p {
-  color: rgba(245,245,245,0.75);
-  line-height: 1.7;
-  font-size: 0.95rem;
-}
-.blog-date {
-  margin-top: 1rem;
-  font-size: 0.8rem;
-  color: rgba(245,245,245,0.4);
-}
-
-/* ═══════════════════════════════════════════
-   9. CONTACT — 연락처
-═══════════════════════════════════════════ */
-.contact-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.5rem;
-  margin-top: 1rem;
-}
-.contact-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 1rem 2rem;
-  font-family: 'Bangers', cursive;
-  font-size: 1.2rem;
-  color: var(--black);
-  background: var(--yellow);
-  text-decoration: none;
-  border-radius: 12px;
-  border: 3px solid var(--black);
-  box-shadow: 4px 4px 0 var(--black);
-  transition: all 0.2s;
-  transform: rotate(-1deg);
-}
-.contact-link:nth-child(2) {
-  background: var(--red);
-  color: var(--white);
-  transform: rotate(1deg);
-}
-.contact-link:hover {
-  transform: translateY(-3px) rotate(0deg);
-  box-shadow: 6px 6px 0 var(--black);
-}
-
-/* ═══════════════════════════════════════════
-   10. FOOTER
-═══════════════════════════════════════════ */
-footer {
-  text-align: center;
-  padding: 3rem 2rem;
-  border-top: 3px dashed rgba(255,255,255,0.08);
-  font-size: 0.85rem;
-  color: rgba(245,245,245,0.35);
-}
-footer span {
-  color: var(--red);
-  font-family: 'Bangers', cursive;
-}
-
-/* ═══════════════════════════════════════════
-   11. DECORATIVE BLOBS (배경 그라데이션 원)
-═══════════════════════════════════════════ */
-.blob {
-  position: fixed;
-  border-radius: 50%;
-  filter: blur(100px);
-  pointer-events: none;
-  z-index: -1;
-  opacity: 0.35;
-}
-.blob--red {
-  width: 500px; height: 500px;
-  background: var(--red);
-  top: -100px; left: -100px;
-}
-.blob--yellow {
-  width: 400px; height: 400px;
-  background: var(--yellow);
-  bottom: -80px; right: -80px;
-}
-.blob--red2 {
-  width: 350px; height: 350px;
-  background: var(--red);
-  top: 50%; right: 10%;
-}
-
-/* ═══════════════════════════════════════════
-   12. TAPE (테이프 장식)
-═══════════════════════════════════════════ */
-.tape {
-  position: absolute;
-  width: 80px;
-  height: 24px;
-  background: rgba(255, 214, 0, 0.5);
-  border: 1px solid rgba(255, 214, 0, 0.3);
-  z-index: 5;
-}
-.tape--tl { top: -10px; left: 20px;  transform: rotate(-25deg); }
-.tape--tr { top: -10px; right: 20px; transform: rotate(20deg);  }
-
-/* ═══════════════════════════════════════════
-   13. TIMELINE (경력/히스토리)
+   11. TIMELINE / QUEST LOG
 ═══════════════════════════════════════════ */
 .timeline {
   position: relative;
-  padding-left: 3rem;
+  padding-left: 2.4rem;
 }
 .timeline::before {
   content: '';
   position: absolute;
-  left: 0.75rem;
+  left: 8px;
   top: 0;
   bottom: 0;
-  width: 3px;
-  background: linear-gradient(to bottom, var(--red), var(--yellow));
-  border-radius: 2px;
+  width: 2px;
+  background: linear-gradient(to bottom,
+    var(--pastel-blue) 0%,
+    var(--pastel-purple) 50%,
+    var(--pastel-green) 100%);
+  border-radius: 1px;
 }
+
 .timeline-item {
   position: relative;
-  margin-bottom: 2.5rem;
-  padding: 1.5rem;
-  transform: rotate(-0.3deg);
+  margin-bottom: 2rem;
+  padding: 1.4rem 1.6rem;
 }
 .timeline-item::before {
   content: '';
   position: absolute;
-  left: -2.55rem;
-  top: 1.6rem;
-  width: 16px;
-  height: 16px;
-  background: var(--yellow);
-  border: 3px solid var(--black);
+  left: -2.1rem;
+  top: 1.5rem;
+  width: 14px;
+  height: 14px;
+  background: var(--dark);
+  border: 3px solid var(--pastel-blue);
   border-radius: 50%;
+  box-shadow: 0 0 8px rgba(168,216,234,0.5);
+  transition: box-shadow 0.3s;
 }
-.timeline-item:nth-child(even) { transform: rotate(0.5deg); }
+.timeline-item:nth-child(2)::before { border-color: var(--pastel-purple); }
+.timeline-item:nth-child(3)::before { border-color: var(--pastel-green); }
+.timeline-item:hover::before {
+  box-shadow: 0 0 16px rgba(168,216,234,0.8);
+}
 
 .timeline-year {
-  font-family: 'Bangers', cursive;
-  font-size: 1.3rem;
-  color: var(--red);
-  margin-bottom: 0.3rem;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.55rem;
+  color: var(--pastel-green);
+  letter-spacing: 0.15em;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 0 8px rgba(181,234,215,0.5);
 }
 .timeline-item h3 {
-  font-family: 'Bangers', cursive;
-  font-size: 1.3rem;
-  color: var(--yellow);
-  margin-bottom: 0.4rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 0.5rem;
 }
 .timeline-item p {
-  color: rgba(245,245,245,0.75);
-  line-height: 1.7;
+  font-size: 0.87rem;
+  line-height: 1.8;
+  color: rgba(248,249,255,0.68);
 }
 
 /* ═══════════════════════════════════════════
-   14. RESPONSIVE
+   12. SKILLS
 ═══════════════════════════════════════════ */
-@media (max-width: 640px) {
-  .sticker { display: none; }
-  .hero-title { font-size: 3rem; }
-  section { padding: 3rem 1rem; }
-  .contact-links { flex-direction: column; }
-  .contact-link { width: 100%; justify-content: center; }
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.2rem;
+}
+
+.skill-item { padding: 1.2rem 1.4rem; }
+
+.skill-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.7rem;
+}
+
+.skill-name {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.52rem;
+  color: var(--pastel-blue);
+  letter-spacing: 0.06em;
+}
+
+.skill-pct {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.48rem;
+  color: rgba(248,249,255,0.45);
+}
+
+.skill-bar {
+  height: 10px;
+  background: rgba(255,255,255,0.07);
+  border-radius: 5px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.10);
+  position: relative;
+}
+.skill-fill {
+  height: 100%;
+  border-radius: 5px;
+  position: relative;
+  transition: width 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.skill-fill::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 8px;
+  background: rgba(255,255,255,0.4);
+  border-radius: 0 5px 5px 0;
+  filter: blur(2px);
+}
+
+/* Different gradient per row */
+.skill-item:nth-child(1) .skill-fill,
+.skill-item:nth-child(4) .skill-fill { background: linear-gradient(90deg, var(--pastel-blue), var(--pastel-purple)); }
+.skill-item:nth-child(2) .skill-fill,
+.skill-item:nth-child(5) .skill-fill { background: linear-gradient(90deg, var(--pastel-purple), var(--pastel-blue)); }
+.skill-item:nth-child(3) .skill-fill,
+.skill-item:nth-child(6) .skill-fill { background: linear-gradient(90deg, var(--pastel-green), var(--pastel-blue)); }
+
+/* ═══════════════════════════════════════════
+   13. BLOG / ITEM CARDS
+═══════════════════════════════════════════ */
+.blog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.4rem;
+}
+
+.blog-card { cursor: pointer; }
+
+.blog-tag {
+  display: inline-block;
+  padding: 0.25rem 0.65rem;
+  border-radius: 4px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.42rem;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.9rem;
+  border: 1px solid;
+}
+.blog-tag.tag-dev    { color: var(--pastel-blue);   border-color: rgba(168,216,234,0.4);  background: rgba(168,216,234,0.10); }
+.blog-tag.tag-design { color: var(--pastel-purple); border-color: rgba(195,177,225,0.4);  background: rgba(195,177,225,0.10); }
+.blog-tag.tag-life   { color: var(--pastel-green);  border-color: rgba(181,234,215,0.4);  background: rgba(181,234,215,0.10); }
+
+.blog-card h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 0.7rem;
+  line-height: 1.5;
+}
+.blog-card p {
+  font-size: 0.83rem;
+  color: rgba(248,249,255,0.62);
+  line-height: 1.75;
+}
+.blog-date {
+  margin-top: 1rem;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.40rem;
+  color: rgba(248,249,255,0.35);
+  letter-spacing: 0.05em;
 }
 
 /* ═══════════════════════════════════════════
-   15. SCROLL REVEAL ANIMATION
+   14. CONTACT
+═══════════════════════════════════════════ */
+.contact-intro {
+  font-size: 0.95rem;
+  color: rgba(248,249,255,0.70);
+  line-height: 1.9;
+  margin-bottom: 2rem;
+}
+
+.contact-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.contact-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.85rem 1.8rem;
+  background: var(--glass);
+  border: 2px solid var(--glass-border);
+  border-radius: 12px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.52rem;
+  letter-spacing: 0.06em;
+  color: var(--white);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+.contact-link::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.05), transparent);
+  opacity: 0;
+  transition: opacity 0.25s;
+}
+.contact-link:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px var(--shadow-blue);
+  border-color: rgba(168,216,234,0.45);
+}
+.contact-link:hover::before { opacity: 1; }
+
+.contact-link.github { border-color: rgba(168,216,234,0.35); }
+.contact-link.email  { border-color: rgba(195,177,225,0.35); }
+.contact-link.github:hover { box-shadow: 0 8px 24px var(--shadow-blue); }
+.contact-link.email:hover  { box-shadow: 0 8px 24px var(--shadow-purple); }
+
+/* ═══════════════════════════════════════════
+   15. FOOTER
+═══════════════════════════════════════════ */
+.site-footer {
+  text-align: center;
+  padding: 2rem;
+  border-top: 1px solid var(--glass-border);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.42rem;
+  color: rgba(248,249,255,0.28);
+  letter-spacing: 0.08em;
+  line-height: 2;
+  margin-top: 1rem;
+}
+.site-footer span {
+  color: var(--pastel-blue);
+}
+
+/* ═══════════════════════════════════════════
+   16. PLACEHOLDER PAGE (Coming Soon)
+═══════════════════════════════════════════ */
+.coming-soon {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  min-height: 60vh;
+  gap: 1.8rem;
+}
+
+.coming-soon-icon {
+  font-size: 4rem;
+  filter: drop-shadow(0 0 20px rgba(168,216,234,0.4));
+}
+
+.coming-soon-title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(1rem, 2.5vw, 1.6rem);
+  color: var(--white);
+  letter-spacing: 0.08em;
+  text-shadow: 0 0 20px rgba(168,216,234,0.4);
+  line-height: 1.5;
+}
+
+.coming-soon-subtitle {
+  font-size: 0.95rem;
+  color: rgba(248,249,255,0.60);
+  line-height: 1.9;
+  max-width: 480px;
+}
+
+.rpg-blink {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.55rem;
+  color: var(--pastel-purple);
+  letter-spacing: 0.2em;
+  animation: rpg-cursor-blink 1.2s step-end infinite;
+}
+
+/* ═══════════════════════════════════════════
+   17. SCROLL REVEAL
 ═══════════════════════════════════════════ */
 .reveal {
   opacity: 0;
-  transform: translateY(40px);
+  transform: translateY(32px);
   transition: opacity 0.7s ease, transform 0.7s ease;
 }
 .reveal.visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* ═══════════════════════════════════════════
+   18. MOBILE HAMBURGER
+═══════════════════════════════════════════ */
+.mobile-nav-bar {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: rgba(22, 33, 62, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--glass-border);
+  padding: 0.7rem 1.2rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mobile-brand {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.6rem;
+  color: var(--pastel-blue);
+  letter-spacing: 0.1em;
+}
+
+.hamburger {
+  background: none;
+  border: 1px solid var(--glass-border);
+  border-radius: 6px;
+  padding: 0.45rem 0.65rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.hamburger span {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: var(--pastel-blue);
+  border-radius: 1px;
+  transition: all 0.3s;
+}
+
+.mobile-menu {
+  display: none;
+  position: fixed;
+  top: 52px;
+  left: 0;
+  right: 0;
+  z-index: 99;
+  background: rgba(22, 33, 62, 0.96);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--glass-border);
+  padding: 1rem;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.mobile-menu.open { display: flex; }
+
+/* ═══════════════════════════════════════════
+   19. RESPONSIVE
+═══════════════════════════════════════════ */
+@media (max-width: 900px) {
+  :root { --sidebar-width: 260px; }
+  .main-content { padding: 2rem 2rem; }
+}
+
+@media (max-width: 768px) {
+  .mobile-nav-bar { display: flex; }
+
+  .page-wrapper { flex-direction: column; }
+
+  .sidebar {
+    display: none;
+  }
+
+  .main-content {
+    padding: 4.5rem 1.2rem 2rem;
+    width: 100%;
+  }
+
+  .hero { min-height: 70vh; }
+  .hero-title { font-size: clamp(1rem, 5vw, 1.6rem); }
+
+  .about-grid { grid-template-columns: 1fr; }
+  .skills-grid { grid-template-columns: 1fr; }
+  .blog-grid   { grid-template-columns: 1fr; }
+
+  .rpg-window { padding: 1.6rem; }
+
+  .contact-links { flex-direction: column; }
+  .contact-link { width: 100%; justify-content: center; }
+}
+
+@media (min-width: 769px) {
+  .mobile-nav-bar { display: none !important; }
+  .mobile-menu { display: none !important; }
+}
+
+/* ═══════════════════════════════════════════
+   20. SCROLLBAR STYLING
+═══════════════════════════════════════════ */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--dark); }
+::-webkit-scrollbar-thumb {
+  background: rgba(168,216,234,0.25);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(168,216,234,0.45);
 }

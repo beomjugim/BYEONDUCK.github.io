@@ -44,7 +44,7 @@
             class="profile-img"
             src="profile.png"
             alt="BYEONDUCK Profile"
-            onerror="this.style.background='linear-gradient(135deg,rgba(168,216,234,.3) 0%,rgba(195,177,225,.3) 100%)';this.style.display='block';this.removeAttribute('onerror');"
+            onerror="onProfileImgError(this)"
           />
           <span class="corner tl"></span>
           <span class="corner tr"></span>
@@ -90,7 +90,7 @@
       <hr class="sidebar-sep" />
 
       <!-- Footer text in sidebar -->
-      <p style="font-family:'Press Start 2P',monospace;font-size:0.38rem;color:rgba(248,249,255,0.22);text-align:center;line-height:2;letter-spacing:0.08em;margin-top:auto;">
+      <p class="sidebar-footer">
         © 2026 BYEONDUCK<br/>Made with ✨
       </p>
 
@@ -344,6 +344,12 @@
   </div><!-- end page-wrapper -->
 
   <script>
+    /* ── Profile image fallback ── */
+    function onProfileImgError(img) {
+      img.style.background = 'linear-gradient(135deg,rgba(168,216,234,.3) 0%,rgba(195,177,225,.3) 100%)';
+      img.removeAttribute('onerror');
+    }
+
     /* ── Scroll Reveal ── */
     const revealEls = document.querySelectorAll('.reveal');
     const revealObserver = new IntersectionObserver((entries) => {

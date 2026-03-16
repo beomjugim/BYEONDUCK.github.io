@@ -1039,3 +1039,16 @@ a { text-decoration: none; color: inherit; }
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(168,216,234,0.45);
 }
+
+/* ═══════════════════════════════════════════
+   21. SIDEBAR FOOTER TEXT
+═══════════════════════════════════════════ */
+.sidebar-footer {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.38rem;
+  color: rgba(248, 249, 255, 0.22);
+  text-align: center;
+  line-height: 2;
+  letter-spacing: 0.08em;
+  margin-top: auto;
+}
